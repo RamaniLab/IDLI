@@ -10,7 +10,7 @@ Scripts for data analysis:
 --------------------
 *Preprocessing PacBio data for single-molecule accessibility*
 
-To preprocess sequencing data for downstream analyses, we utilized software from Pacific Biosciences and a custom script (*hmm_output_t_values.py*). These resulted in the following output per sample: (1) an alignment of CCS reads to the mouse reference genome (mm10); (2) an accessibility prediction per CCS molecule (Viterbi path of HMM component of model); and (3) a .csv of footprint locations (*i.e.* start / end positions) and footprint sizes on a per-molecule basis. Files for (2) and (3) were generated across a range of t values (*t*  = 1, 31, 51, 71, and 101 / 1,000) for each sequencing library.
+To preprocess sequencing data for downstream analyses, we utilized software from Pacific Biosciences and a custom script (hmm_output_t_values.py). These resulted in the following output per sample: (1) an alignment of CCS reads to the mouse reference genome (mm10); (2) an accessibility prediction per CCS molecule (Viterbi path of HMM component of model); and (3) a .csv of footprint locations (*i.e.* start / end positions) and footprint sizes on a per-molecule basis. Files for (2) and (3) were generated across a range of t values (*t*  = 1, 31, 51, 71, and 101 / 1,000) for each sequencing library.
 
 *Quantification of extent of methyltransferase footprinting per sequencing library*
 
