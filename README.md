@@ -47,8 +47,8 @@ Individual fibers with at least three Leiden-classified footprints of nucleosoma
 
 Data availability:
 --------------------
-Newly-generated datasets for this study is available on NCBI / GEO at GSEXXXXXX. Previously-published datasets from our laboratory utilized in this study are available on NCBI / GEO at GSE197979 and GSE225314.
+Raw and processed data will be made available at GEO accession GSEXXXXXX.
 
 Contact information:
 --------------------
-Please contact Vijay Ramani (vijay.ramani@gladstone.ucsf.edu) or Marty Yang (marty.yang@gladstone.ucsf.edu) for any questions.
+Please contact Vijay Ramani (vijay.ramani[at]gladstone.ucsf.edu) or Marty Yang (marty.yang[at]gladstone.ucsf.edu) for questions.
