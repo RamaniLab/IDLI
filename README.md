@@ -4,7 +4,7 @@ This README is intended to share code for analyses performed in the following ma
 
 Yang MG, Wang S, Richter HJ, Harris N, Maresca M, de Wit E, Willenbring H, Maher J, Canzio D, Goodarzi H#, and Ramani V#. "Programmed, patterned, and pervasive nucleosomal distortion on mammalian chromatin fibers". *Submitted* (2024)
 
-*All scripts are provided as is, without any warranty and for use at your own risk. This is __not__ the release of a software package. We are only providing this information and code, in addition to a description of methods for making it easier to reproduce our analyses. We are __not__ providing any support for these scripts.*
+*All scripts are provided as is, without any warranty and for use at your own risk. This is __not__ the release of a software package. We are only providing this information and code, in addition to a description of methods, for making it easier to reproduce our analyses. We are __not__ providing any support for these scripts.*
 
 Summary:
 --------------------
