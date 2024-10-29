@@ -2,14 +2,14 @@
 
 This README is intended to share code for analyses performed in the following manuscript:
 
-Yang MG, Wang S, Richter HJ, Harris N, Maresca M, de Wit E, Willenbring H, Maher J, Canzio D, Goodarzi H#, and Ramani V#. "Pervasive, patterned, and programmed nucleosomal distortion on mammalian chromatin fibers". *Submitted* (2024)
+Yang MG, Wang S, Richter HJ, McNally CP, Harris N, Maresca M, de Wit E, Willenbring H, Maher J, Goodarzi H#, and Ramani V#. "Pervasive, patterned, and programmed nucleosomal distortion on mammalian chromatin fibers". *Submitted* (2024)
 
 *All scripts are provided as is, without any warranty and for use at your own risk. This is __not__ the release of a software package. We are only providing this information and code, in addition to a description of methods, for making it easier to reproduce our analyses. We are __not__ providing any support for these scripts.*
 
 Summary:
 --------------------
 
-We present a genome-scale method to map the single-molecule co-occupancy of structurally distinct nucleosomes, subnucleosomes, and other protein-DNA interactions via long-read high-resolution adenine-methyltransferase footprinting. Iteratively Defined Lengths of Inaccessibility (IDLI) classifies nucleosomes on the basis of shared patterns of intranucleosomal accessibility, into: i.) minimally-accessible octasomes; ii.) octasomes with stereotyped DNA accessibility from superhelical locations (SHLs) +/-1 through +/-7; iii.) highly-accessible unwrapped nucleosomes; and iv.) subnucleosomal species such as hexasomes. Applying IDLI to datasets from murine embryonic stem cells (mESCs), we discover widespread nucleosomal distortion on individual mammalian chromatin fibers. We observe epigenomic-domain-specific patterns of distorted nucleosome co-occupancy and translational positioning, including at murine enhancers, promoters, and satellite repeat sequences. Nucleosome distortion is programmed by the presence of bound transcription factors (TFs) at cognate motifs; occupied TF binding sites are differentially decorated by distorted nucleosomes compared to unbound sites, and degradation experiments establish direct roles for TFs in structuring binding-site proximal nucleosomes. Extending IDLI to single-molecule footprinting data from primary murine hepatocytes, we observe evidence for pervasive nucleosomal distortion *in vivo*; we further confirm a role for the hepatocyte master regulator FOXA2 in subtly impacting nucleosome distortion at hepatocyte-specific regulatory elements *in vivo*. Our study provides much-needed insight into the interplay between nucleosome dynamics, DNA sequence, and regulatory factor binding across the mammalian epigenome. More generally, our work provides an essential framework to model transcription factor binding, nucleosome remodeling, and cell-type specific gene regulation across biological contexts.
+[ABSTRACT HERE]
 
 Code overview:
 --------------------
