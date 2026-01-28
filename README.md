@@ -2,7 +2,7 @@
 
 This README is intended to share code for analyses performed in the following manuscript:
 
-Yang MG, Richter HJ, Wang S, McNally CP, Harris N, Dhillon S, Maresca M, de Wit E, Willenbring H, Maher J, Goodarzi H#, and Ramani V#. "Pervasive and programmed nucleosome distortion patterns on single mammalian chromatin fibers". *Submitted* (2024)
+Yang MG*, Richter HJ*, Wang S*, [...] Goodarzi H#, and Ramani V#. "Pervasive and programmed nucleosome distortion on single chromatin fibers". *Submitted* (2026)
 
 *All scripts are provided as is, without any warranty and for use at your own risk. This is __not__ the release of a software package. We are only providing this information and code, in addition to a description of methods, for making it easier to reproduce our analyses. We are __not__ providing any support for these scripts.*
 
@@ -45,10 +45,17 @@ For structural visualization of mean accessibility patterns from defined cluster
 
 Individual fibers with at least three Leiden-classified footprints within ±500 bp of repeat elements / TF motifs of interest were selected. Fibers with footprints >200 nt and/or with footprints in the least abundant 10% of clusters were excluded from further analysis. Consecutive ‘triplet’ footprints were tabulated by computing midpoints and lengths for: (1) the central-most footprint nearest the repeat element / TF-binding motif; (2) the most proximal footprint upstream of the central-most footprint; and (3) the most proximal footprint downstream of the central-most footprint. Per-molecule accessibility data was computed for a 2-kb window centered on the repeat element / TF-binding motif of interest for visualization alongside footprint positions, accounting for sequence feature strand appropriately. Representative code for performing this analysis is provided ([process_triplet_footprints.py](https://github.com/RamaniLab/Subnucleosome/blob/main/process_triplet_footprints.py)).
 
+*Visualizing nucleosome type clusters and groups in R*
+
+Standardized code in R for visualizing size, accessibility, and horizon-style plots for nucleosome clusters. Additionally, code for clustering nucleosome types into groups and visualizing the relations between nucleosome types as a dendogram. 
+(https://github.com/RamaniLab/IDLI/blob/main/ClusterPlotting.Rmd). 
+
+
 Data availability:
 --------------------
-Raw and processed data will be made available at GEO accession GSEXXXXXX.
+Raw and processed data will be made available at GEO accession GSE288933.
+A subsampled example dataset will be made available at 10.5281/zenodo.18343575 and can be processed with the three files labeled "forZenodo".
 
 Contact information:
 --------------------
-Please contact Marty Yang (marty.yang[at]gladstone.ucsf.edu) and/or Vijay Ramani (vijay.ramani[at]gladstone.ucsf.edu) for questions.
+Please contact Vijay Ramani (vijay.ramani[at]gladstone.ucsf.edu) for questions.
