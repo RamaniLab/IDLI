@@ -1,0 +1,197 @@
+---
+title: "IDLI_ClusterPlotting"
+author: "hannah richter"
+date: "2026-01-27"
+output: html_document
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+
+#necessary packages
+library(ggplot2)
+library(patchwork)
+library(extrafont)
+library(reshape2)
+library(ggplot2)
+library(viridis)
+library(dplyr)
+library(tidyr)
+library(cluster)
+library(factoextra)
+library(qvalue)
+
+```
+
+## First, set theme for your plots
+
+```{r set theme}
+# Define a common theme with font size 7, Arial, and rotated x-axis labels
+common_theme <- theme_bw(base_size = 12, base_family = "Arial") + 
+  theme(panel.grid.major = element_line(colour = "grey90", linewidth = 0.2), # Adjust colour and linewidth as desired
+    axis.text.x = element_text(size = 12, angle = 90, hjust = 1, vjust = 0.5),
+    strip.text = element_text(size = 12),
+    axis.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+```
+
+## Making the key plots for visualizing clustered subnucleosome types
+
+```{r pressure}
+# Define the order vector - however many nucleosome clusters you are visualizing
+order <- c('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16')
+
+# Read and transform data - these files are exported from our clustering python code
+p3 = read.table('plotme_vplots_clusters_forZenodo_randomnucs_res50.txt')
+p2 = read.table('plotme_lengths_clusters_forZenodo_randomnucs_res50.txt')
+p1 = read.table('plotme_accplots_clusters_forZenodo_randomnucs_res50.txt')
+
+p3$V5 <- as.character(p3$V4)
+p3 <- p3[abs(p3$V2) <= 70, ]
+f <- quantile(p3$V3, 0.95, na.rm = TRUE)
+g <- quantile(p3$V3, 0, na.rm = TRUE)
+p3$ordered <- factor(p3$V5, levels = order)
+
+# Plot 1: plot_vplot 
+plot_vplot <- ggplot(p3, aes(x = V2, y = V1, fill = V3)) +
+  geom_raster() +
+  facet_wrap(~ ordered, nrow = 1) +
+  scale_fill_viridis_c(option = 'magma', limits = c(g, f), oob = scales::squish) +
+  scale_x_continuous(breaks = c(-70, -30, 0, 30, 70)) +
+  labs(x = "Distance to footprint midpoint (bp)", y = "Subfootprint size (bp)", fill = "Capped z-score") +
+  common_theme +
+  theme(legend.position = "bottom")  
+
+p2$V3 <- as.character(p2$V2)
+p2$ordered <- factor(p2$V3, levels = order)
+
+# Plot 2: plot_size
+plot_size <- ggplot(p2, aes(x = V1, y = after_stat(density))) +
+  geom_histogram(binwidth = 5) +
+  facet_wrap(~ ordered, nrow = 1) +
+  labs(x = "Footprint size (bp)", y = "Density") +
+  common_theme
+
+# Plot 3: plot_acc
+p1$V5 <- as.character(p1$V3)
+p1$ordered <- factor(p1$V5, levels = order)
+
+# Aggregate the data
+p1_aggregated <- p1 %>%
+  group_by(V1, ordered) %>%
+  summarise(V2_mean = mean(V2), .groups = 'drop') 
+
+# Plot the aggregated data
+plot_acc <- ggplot(p1_aggregated, aes(x = V1, y = V2_mean)) + 
+  geom_line(linewidth=0.5) +
+  facet_wrap(~ ordered, nrow = 1) +
+  labs(x = "Distance to footprint midpoint (bp)", y = "Fraction accessible") + 
+  scale_x_continuous(breaks = c(-70, -30, 0, 30, 70)) +
+  common_theme
+```
+
+To print/save your initial plots for visualizing the clusters as .pdfs, run the code below.
+
+```{r save main plots}
+# Print the plots
+print(plot_vplot)
+print(plot_acc)
+print(plot_size)
+
+# Save as PDF
+ggsave("vplot_unordered.pdf", plot = plot_vplot, width = 35, height = 8, units = "cm")
+ggsave("plot_size_unordered.pdf", plot = plot_size, width = 35, height = 8, units = "cm")
+ggsave("plot_acc_unordered.pdf", plot = plot_size, width = 35, height = 8, units = "cm")
+
+# Combine plots vertically using patchwork
+combined_plots <- plot_size + plot_acc + plot_vplot + plot_layout(ncol = 1)
+
+ggsave(
+  filename = "IDLI_allplots_unordered.pdf",
+  plot = combined_plots,
+  width = 16,
+  height = 8,
+  dpi = 300
+)
+```
+
+## Dendogram for grouping nucleosome types
+
+```{r}
+#Make dend plot for assigning nucleosome groups
+
+# Load the data
+p3 = read.table('plotme_vplots_clusters_forZenodo_randomnucs_res50.txt', header=FALSE)
+
+# Filter the data - this can be adjusted, but these filters generally work
+p3 <- p3[abs(p3$V2) <= 70, ]
+p3 <- p3[abs(p3$V1) <= 75, ]
+
+# Calculate quantiles for scaling
+f <- quantile(p3$V3, 0.95, na.rm = TRUE)
+g <- quantile(p3$V3, 0, na.rm = TRUE)
+
+p3 <- p3[p3$V4 != 14, ] #remove unmethylated cluster
+
+# Define categories to be mirrored (the ones with right-hand accessibility)
+# this needs to be done for hierarchical clustering to recognize flipped nucleosome types as similar
+categories_to_mirror <- c(2, 7, 11, 12, 13) #always change these yourself!
+
+# Filter the data for specific categories
+temp_filtered_p3 <- p3[p3$V4 %in% categories_to_mirror, ]
+
+# Mutate the filtered data
+p3_mirror <- temp_filtered_p3 # Initialize p3_mirror with the filtered data
+
+# Apply the transformations
+p3_mirror$V2 <- -(p3_mirror$V2)
+p3_mirror$V4 <- paste0(p3_mirror$V4, "'")
+
+rm(temp_filtered_p3)
+
+p3_filtered <- p3[!(p3$V4 %in% categories_to_mirror), ]
+p3_combined <- rbind(p3_filtered, p3_mirror)
+p3_wide <- reshape2::dcast(p3_combined, V1 + V2 ~ V4, value.var = "V3")
+p3_wide[is.na(p3_wide)] <- 0
+data_for_clustering <- p3_wide[, -(1:2)]
+
+# Perform hierarchical clustering
+distance_matrix <- dist(t(data_for_clustering))
+hclust_result <- hclust(distance_matrix, method = "ward.D2")
+
+custom_colors <- c("#FF4500", "#1E90FF", "#32CD99", "#FFD700", "#8B008B", "#8FBC8F", "#DC143C", "#20B2AA", "#DAA520")
+
+# Plot the dendrogram using factoextra
+dend_plot <- fviz_dend(hclust_result, 
+                       k = 6, # Cut into k clusters - typically 7 for most IDLI analyses, can adjust
+                       cex = 0.5, 
+                       k_colors = custom_colors, 
+                       color_labels_by_k = TRUE, 
+                       rect = TRUE, 
+                       rect_fill = TRUE, 
+                       ggtheme = theme_minimal() + 
+                         theme(
+                           plot.title = element_blank(), 
+                           text = element_text(size = 7),
+                           axis.text.x = element_text(angle = 90, hjust = 1) 
+                         ))
+
+```
+
+## print and save your dendogram
+
+```{r}
+print(dend_plot)
+
+ggsave(
+  filename = "dendplot.pdf",
+  plot = dend_plot,
+  width = 4,
+  height = 4,
+  dpi = 300
+)
+
+```
+
+# based on these initial observations and clustering, you can then reorder the nucleosome types into groups, rather than keeping them in abundance order, for ease of interpretation.
